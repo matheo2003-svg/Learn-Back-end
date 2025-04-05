@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script> <!-- Importing Base64 decoder -->
+</head>
+<body>
+    <h1>Welcome, <span id="username">[Username]</span>!</h1>
+    <p>Email: <span id="email">[User Email]</span></p>
+    <button onclick="logout()">Logout</button>
+
+    <script>
+        // Get the JWT token from the query string
+        const token = new URLSearchParams(window.location.search).get('token');
+        
+        if (token) {
+            // Decode JWT token (assuming it's a simple Base64 encoded token, such as: <header>.<payload>.<signature>)
+            const payloadBase64 = token.split('.')[1]; // JWT tokens are in the format <header>.<payload>.<signature>
+            const decodedPayload = atob(payloadBase64); // Decode the base64 payload
+            const userData = JSON.parse(decodedPayload); // Parse the JSON payload
+
+            // Display the user data
+            document.getElementById('username').innerText = userData.username || 'User';
+            document.getElementById('email').innerText = userData.email || 'Email not provided';
+        } else {
+            console.log('No token found');
+            window.location.href = '/front-end.html'; // Redirect to login page if no token is found
+        }
+
+        // Logout function to clear the token and redirect to login
+        function logout() {
+            // Clear the JWT token from localStorage
+            localStorage.removeItem('token');
+            // Redirect to the login page
+            window.location.href = '/front-end.html';
+        }
+    </script>
+</body>
+</html>
