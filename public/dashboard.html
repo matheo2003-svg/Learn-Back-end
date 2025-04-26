@@ -5,11 +5,556 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script> <!-- Importing Base64 decoder -->
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script src="/booking.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4361ee", secondary: "#3f37c9" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="dashboard.css"> <!-- this css file works proper with all then links and scripts on top -->
 </head>
 <body>
-    <h1>Welcome, <span id="username">[Username]</span>!</h1>
-    <p>Email: <span id="email">[User Email]</span></p>
-    <button onclick="logout()">Logout</button>
+
+
+
+<!-- Header Section -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div
+      class="container mx-auto px-4 py-3 flex items-center justify-between"
+    >
+      <div class="flex items-center">
+        <h1 class="text-2xl font-['Pacifico'] text-primary mr-8">
+          GlideConnex
+        </h1>
+        <nav class="hidden md:flex space-x-6">
+          <a href="#" class="text-primary font-medium">Home</a>
+          <a href="#" class="text-gray-600 hover:text-primary">Routes</a>
+          <a href="#" class="text-gray-600 hover:text-primary">Schedule</a>
+          <a href="#" class="text-gray-600 hover:text-primary">Help</a>
+        </nav>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center bg-gray-100 rounded-full py-1 px-3">
+          <div class="w-8 h-8 flex items-center justify-center text-primary">
+            <i class="ri-map-pin-line ri-lg"></i>
+          </div>
+          <span class="text-sm font-medium">Garankuwa Campus</span>
+        </div>
+        <div
+          class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full relative cursor-pointer"
+        >
+          <i class="ri-notification-3-line ri-lg"></i>
+          <span
+            class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center"
+            >3</span
+          >
+        </div>
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+            <img
+              src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20male%20university%20student%20with%20short%20hair%2C%20neutral%20expression%2C%20simple%20background&width=100&height=100&seq=1&orientation=squarish"
+              alt="Profile"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <span class="text-sm font-medium hidden md:inline"
+            > <h1><span class="username">[Username]</span></h1></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+
+
+
+    
+
+  <section class="container mx-auto px-4 py-8">
+    <!-- Tab Navigation -->
+    <div class="flex border-b mb-4">
+      <button id="madeiraTab" class="tab-button py-2 px-4 font-semibold text-lg w-1/2 text-center bg-primary text-white">Madeira</button>
+      <button id="townResidencesTab" class="tab-button py-2 px-4 font-semibold text-lg w-1/2 text-center bg-gray-200 text-gray-700">Town Residences</button>
+    </div>
+  
+    <!-- Madeira Schedule Tab -->
+    <div id="madeiraSchedule" class="schedule-tab hidden">
+      <h2 class="text-2xl font-semibold text-primary mb-6">Madeira Residence - Bus Schedule</h2>
+  
+      <div class="mb-10">
+        <h3 class="text-xl font-semibold text-secondary mb-4">To Campus</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th class="py-3 px-6 text-left">Time</th>
+                <th class="py-3 px-6 text-left">Number of Buses</th>
+                <th class="py-3 px-6 text-left">Action</th> <!-- New -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="py-3 px-6">06:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                  <button onclick="bookRide(this,getUserId(),'06:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">07:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                  <button onclick="bookRide(this,getUserId(),'07:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                </td>
+              </tr>
+
+              <tr class="border-b">
+                <td class="py-3 px-6">07:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'07:30', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">08:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'08:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">08:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'08:30', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">09:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'09:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">10:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'10:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="py-3 px-6">12:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'12:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <!-- Repeat for the other times -->
+              <!-- ... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+      <div>
+        <h3 class="text-xl font-semibold text-secondary mb-4">Return to Madeira Residence</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th class="py-3 px-6 text-left">Time</th>
+                <th class="py-3 px-6 text-left">Number of Buses</th>
+                <th class="py-3 px-6 text-left">Action</th> <!-- New -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="py-3 px-6">12:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                  <button onclick="bookRide(this,getUserId(),'12:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">12:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'12:30', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">13:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'13:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">14:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'14:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">15:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'15:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">16:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'16:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">16:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'16:30', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">17:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'17:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">18:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'18:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">19:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'19:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">20:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'20:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="py-3 px-6">22:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'22:00', 'Return Madeira')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <!-- Repeat for the other times -->
+              <!-- ... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Town Residences Schedule Tab -->
+    <div id="townResidencesSchedule" class="schedule-tab hidden">
+      <h2 class="text-2xl font-semibold text-primary mb-6">Town Residences - Bus Schedule</h2>
+  
+      <!-- To Campus -->
+      <div class="mb-10">
+        <h3 class="text-xl font-semibold text-secondary mb-4">To Campus</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th class="py-3 px-6 text-left">Time</th>
+                <th class="py-3 px-6 text-left">Residence</th>
+                <th class="py-3 px-6 text-left">Number of Buses</th>
+                <th class="py-3 px-6 text-left">Action</th> <!-- New -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="py-3 px-6">06:00</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                  <button onclick="bookRide(this,getUserId(),'06:00', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">07:00</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'07:00', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">07:30</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'07:30', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">08:00</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'08:00', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">08:30</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'08:30', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">09:00</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'09:00', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">10:00</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'10:00', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="py-3 px-6">12:00</td>
+                <td class="py-3 px-6">Drie Lillies via South Point, Arebeng 2 via Arebeng 3 & 1</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'12:00', 'Town To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <!-- Repeat for the other times -->
+              <!-- ... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+      <!-- Return to Town Residences -->
+      <div>
+        <h3 class="text-xl font-semibold text-secondary mb-4">Return to Town Residences</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th class="py-3 px-6 text-left">Time</th>
+                <th class="py-3 px-6 text-left">Number of Buses</th>
+                <th class="py-3 px-6 text-left">Action</th> <!-- New -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="py-3 px-6">12:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                  <button onclick="bookRide(this,getUserId(),'12:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">12:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'12:30', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">13:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'13:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">13:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'13:30', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">14:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'14:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">15:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'15:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">16:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'16:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">16:30</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'16:30', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">17:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'17:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">18:00</td>
+                <td class="py-3 px-6">2</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'18:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">19:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'19:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-3 px-6">20:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'20:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <tr class="border-b">
+                <td class="py-3 px-6">22:00</td>
+                <td class="py-3 px-6">1</td>
+                <td class="py-3 px-6">
+                    <button onclick="bookRide(this,getUserId(),'22:00', 'Return Town')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  </td>
+              </tr>
+              <!-- Repeat for the other times -->
+              <!-- ... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <script>
+        // JavaScript for tab navigation
+        document.getElementById("madeiraTab").addEventListener("click", function() {
+          document.getElementById("madeiraSchedule").classList.remove("hidden");
+          document.getElementById("townResidencesSchedule").classList.add("hidden");
+      
+          document.getElementById("madeiraTab").classList.add("bg-primary", "text-white");
+          document.getElementById("townResidencesTab").classList.remove("bg-primary", "text-white");
+          document.getElementById("townResidencesTab").classList.add("bg-gray-200", "text-gray-700");
+        });
+      
+        document.getElementById("townResidencesTab").addEventListener("click", function() {
+          document.getElementById("townResidencesSchedule").classList.remove("hidden");
+          document.getElementById("madeiraSchedule").classList.add("hidden");
+      
+          document.getElementById("townResidencesTab").classList.add("bg-primary", "text-white");
+          document.getElementById("madeiraTab").classList.remove("bg-primary", "text-white");
+          document.getElementById("madeiraTab").classList.add("bg-gray-200", "text-gray-700");
+        });
+      </script>
+      
+
+      <script>
+        // Function to get username dynamically
+        function getUserId() {
+          return document.querySelector('.id').textContent; // Fetch the username from the span element
+        }
+      </script>      
+
+
+   <h1>Welcome.........., <span class="username">[Username]</span></h1>
+    <p>Email: <span class="email">[User Email]</span></p>
+    <span class="id"></span>
+
+    <button onclick="logout()" class="bg-primary text-white py-2 px-4 rounded-button hover:bg-secondary transition">Logout</button>
+
+    
+
+
+
+
+
+
+
 
     <script>
         // Get the JWT token from the query string
@@ -22,8 +567,17 @@
             const userData = JSON.parse(decodedPayload); // Parse the JSON payload
 
             // Display the user data
-            document.getElementById('username').innerText = userData.username || 'User';
-            document.getElementById('email').innerText = userData.email || 'Email not provided';
+
+            document.querySelectorAll('.id').forEach(el => {
+                   el.innerText = userData.id || 'User';
+             });
+            document.querySelectorAll('.username').forEach(el => {
+                   el.innerText = userData.username || 'User';
+             });
+             document.querySelectorAll('.email').forEach(el => {
+                   el.innerText = userData.email || 'User';
+             });
+
         } else {
             console.log('No token found');
             window.location.href = '/front-end.html'; // Redirect to login page if no token is found
