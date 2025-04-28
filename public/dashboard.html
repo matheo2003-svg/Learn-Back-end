@@ -6,7 +6,7 @@
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script> <!-- Importing Base64 decoder -->
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script src="/booking.js"></script>
+    <script src="booking.js"></script>
 
     <script>
       tailwind.config = {
@@ -28,6 +28,55 @@
           },
         },
       };
+      
+
+    
+              // Function to get username dynamically
+              function getUserId() {
+                 const userId = Number(document.querySelector('.id').textContent);
+                 console.log('User ID:', userId);  // Check the value of userId
+               return userId;
+                }
+function loadUserData() {
+    const token = new URLSearchParams(window.location.search).get('token');
+
+    if (token) {
+        const payloadBase64 = token.split('.')[1];
+        const decodedPayload = atob(payloadBase64);
+        const userData = JSON.parse(decodedPayload);
+
+        document.querySelectorAll('.id').forEach(el => {
+            el.innerText = userData.userId || 'User';
+        });
+        document.querySelectorAll('.username').forEach(el => {
+            el.innerText = userData.username || 'User';
+        });
+        document.querySelectorAll('.email').forEach(el => {
+            el.innerText = userData.email || 'User';
+        });
+    } else {
+        console.log('No token found');
+        window.location.href = '/front-end.html';
+    }
+}
+
+// Call the function when the page is fully loaded
+window.addEventListener('DOMContentLoaded', loadUserData);
+
+
+     
+        // Logout function to clear the token and redirect to login
+        function logout() {
+            // Clear the JWT token from localStorage
+            localStorage.removeItem('token');
+            // Redirect to the login page
+            window.location.href = '/front-end.html';
+        }
+
+
+
+
+
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -97,9 +146,10 @@
   </header>
 
 
-
-
-
+<!--These spans have to be there-->
+  <span class="id" style="display: none;">[id]</span>
+  <span class="username" style="display: none;">[Username]</span>
+  <span class="email" style="display: none;">[User Email]</span>
     
 
   <section class="container mx-auto px-4 py-8">
@@ -124,19 +174,20 @@
                 <th class="py-3 px-6 text-left">Action</th> <!-- New -->
               </tr>
             </thead>
+        
             <tbody>
               <tr class="border-b">
                 <td class="py-3 px-6">06:00</td>
                 <td class="py-3 px-6">1</td>
                 <td class="py-3 px-6">
-                  <button onclick="bookRide(this,getUserId(),'06:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  <button onclick="bookRide(this,getUserId(),'06:00', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                 </td>
               </tr>
               <tr class="bg-gray-50 border-b">
                 <td class="py-3 px-6">07:00</td>
                 <td class="py-3 px-6">2</td>
                 <td class="py-3 px-6">
-                  <button onclick="bookRide(this,getUserId(),'07:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                  <button onclick="bookRide(this,getUserId(),'07:00', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                 </td>
               </tr>
 
@@ -144,42 +195,42 @@
                 <td class="py-3 px-6">07:30</td>
                 <td class="py-3 px-6">1</td>
                 <td class="py-3 px-6">
-                    <button onclick="bookRide(this,getUserId(),'07:30', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                    <button onclick="bookRide(this,getUserId(),'07:30', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                   </td>
               </tr>
               <tr class="bg-gray-50 border-b">
                 <td class="py-3 px-6">08:00</td>
                 <td class="py-3 px-6">2</td>
                 <td class="py-3 px-6">
-                    <button onclick="bookRide(this,getUserId(),'08:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                    <button onclick="bookRide(this,getUserId(),'08:00', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                   </td>
               </tr>
               <tr class="border-b">
                 <td class="py-3 px-6">08:30</td>
                 <td class="py-3 px-6">1</td>
                 <td class="py-3 px-6">
-                    <button onclick="bookRide(this,getUserId(),'08:30', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                    <button onclick="bookRide(this,getUserId(),'08:30', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                   </td>
               </tr>
               <tr class="bg-gray-50 border-b">
                 <td class="py-3 px-6">09:00</td>
                 <td class="py-3 px-6">1</td>
                 <td class="py-3 px-6">
-                    <button onclick="bookRide(this,getUserId(),'09:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                    <button onclick="bookRide(this,getUserId(),'09:00', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                   </td>
               </tr>
               <tr class="border-b">
                 <td class="py-3 px-6">10:00</td>
                 <td class="py-3 px-6">1</td>
                 <td class="py-3 px-6">
-                    <button onclick="bookRide(this,getUserId(),'10:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                    <button onclick="bookRide(this,getUserId(),'10:00', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                   </td>
               </tr>
               <tr class="bg-gray-50">
                 <td class="py-3 px-6">12:00</td>
                 <td class="py-3 px-6">1</td>
                 <td class="py-3 px-6">
-                    <button onclick="bookRide(this,getUserId(),'12:00', 'Madeira To Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
+                    <button onclick="bookRide(this,getUserId(),'12:00', 'Madeira to Campus')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded">Book</button>
                   </td>
               </tr>
               <!-- Repeat for the other times -->
@@ -498,6 +549,46 @@
 
 
 
+<!-- This shows the ticket after booking -->
+<div id="ticket" class="max-w-sm mx-auto mt-10 p-6 bg-gradient-to-r from-white to-gray-50 border border-dashed border-blue-500 rounded-2xl shadow-2xl hidden">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-extrabold text-blue-700 tracking-wide">Glide Connex</h2>
+    <span class="text-xs text-gray-500">Booking Ticket</span>
+  </div>
+
+  <div class="border-t border-dashed border-gray-300 my-4"></div>
+
+  <div class="text-sm space-y-3">
+    <div class="flex justify-between">
+      <span class="font-semibold text-gray-700">Ticket ID</span>
+      <span id="ticketId" class="font-mono text-gray-900"></span>
+    </div>
+    <div class="flex justify-between">
+      <span class="font-semibold text-gray-700">Departure Time</span>
+      <span id="ticketTime" class="font-mono text-gray-900"></span>
+    </div>
+    <div class="flex justify-between">
+      <span class="font-semibold text-gray-700">Direction</span>
+      <span id="ticketDirection" class="font-mono text-gray-900 text-right"></span>
+    </div>
+    <div class="flex justify-between">
+      <span class="font-semibold text-gray-700">Name</span>
+      <span id="ticketUser" class="font-mono text-gray-900"></span>
+    </div>
+    <div class="flex justify-between">
+      <span class="font-semibold text-gray-700">Email</span>
+      <span id="ticketEmail" class="font-mono text-gray-900 text-right"></span>
+    </div>
+  </div>
+
+  <div class="border-t border-dashed border-gray-300 my-6"></div>
+
+  <div class="flex justify-center">
+    <button onclick="printTicket()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-md transition">
+      🖨️ Print Ticket
+    </button>
+  </div>
+</div>
 
 
 
@@ -505,45 +596,36 @@
 
 
 
+<script>
 
+  // JavaScript for tab navigation
+  document.getElementById("madeiraTab").addEventListener("click", function() {
+         document.getElementById("madeiraSchedule").classList.remove("hidden");
+         document.getElementById("townResidencesSchedule").classList.add("hidden");
+     
+         document.getElementById("madeiraTab").classList.add("bg-primary", "text-white");
+         document.getElementById("townResidencesTab").classList.remove("bg-primary", "text-white");
+         document.getElementById("townResidencesTab").classList.add("bg-gray-200", "text-gray-700");
+       });
+     
+       document.getElementById("townResidencesTab").addEventListener("click", function() {
+         document.getElementById("townResidencesSchedule").classList.remove("hidden");
+         document.getElementById("madeiraSchedule").classList.add("hidden");
+     
+         document.getElementById("townResidencesTab").classList.add("bg-primary", "text-white");
+         document.getElementById("madeiraTab").classList.remove("bg-primary", "text-white");
+         document.getElementById("madeiraTab").classList.add("bg-gray-200", "text-gray-700");
+       });
 
+</script>
 
-
-
-
-      <script>
-        // JavaScript for tab navigation
-        document.getElementById("madeiraTab").addEventListener("click", function() {
-          document.getElementById("madeiraSchedule").classList.remove("hidden");
-          document.getElementById("townResidencesSchedule").classList.add("hidden");
       
-          document.getElementById("madeiraTab").classList.add("bg-primary", "text-white");
-          document.getElementById("townResidencesTab").classList.remove("bg-primary", "text-white");
-          document.getElementById("townResidencesTab").classList.add("bg-gray-200", "text-gray-700");
-        });
-      
-        document.getElementById("townResidencesTab").addEventListener("click", function() {
-          document.getElementById("townResidencesSchedule").classList.remove("hidden");
-          document.getElementById("madeiraSchedule").classList.add("hidden");
-      
-          document.getElementById("townResidencesTab").classList.add("bg-primary", "text-white");
-          document.getElementById("madeiraTab").classList.remove("bg-primary", "text-white");
-          document.getElementById("madeiraTab").classList.add("bg-gray-200", "text-gray-700");
-        });
-      </script>
+
       
 
-      <script>
-        // Function to get username dynamically
-        function getUserId() {
-          return document.querySelector('.id').textContent; // Fetch the username from the span element
-        }
-      </script>      
 
-
-   <h1>Welcome.........., <span class="username">[Username]</span></h1>
-    <p>Email: <span class="email">[User Email]</span></p>
-    <span class="id"></span>
+   
+  
 
     <button onclick="logout()" class="bg-primary text-white py-2 px-4 rounded-button hover:bg-secondary transition">Logout</button>
 
@@ -556,40 +638,6 @@
 
 
 
-    <script>
-        // Get the JWT token from the query string
-        const token = new URLSearchParams(window.location.search).get('token');
-        
-        if (token) {
-            // Decode JWT token (assuming it's a simple Base64 encoded token, such as: <header>.<payload>.<signature>)
-            const payloadBase64 = token.split('.')[1]; // JWT tokens are in the format <header>.<payload>.<signature>
-            const decodedPayload = atob(payloadBase64); // Decode the base64 payload
-            const userData = JSON.parse(decodedPayload); // Parse the JSON payload
-
-            // Display the user data
-
-            document.querySelectorAll('.id').forEach(el => {
-                   el.innerText = userData.id || 'User';
-             });
-            document.querySelectorAll('.username').forEach(el => {
-                   el.innerText = userData.username || 'User';
-             });
-             document.querySelectorAll('.email').forEach(el => {
-                   el.innerText = userData.email || 'User';
-             });
-
-        } else {
-            console.log('No token found');
-            window.location.href = '/front-end.html'; // Redirect to login page if no token is found
-        }
-
-        // Logout function to clear the token and redirect to login
-        function logout() {
-            // Clear the JWT token from localStorage
-            localStorage.removeItem('token');
-            // Redirect to the login page
-            window.location.href = '/front-end.html';
-        }
-    </script>
+  
 </body>
 </html>

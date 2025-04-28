@@ -6,11 +6,15 @@ async function createBooking(userId, time, direction) {
     try {
         connection = await getConnection();
 
+        // Ensure time and direction are strings
+        time = String(time);
+        direction = String(direction);
+
         // First, find the matching schedule
         const scheduleResult = await connection.execute(
             `SELECT schedule_id FROM bus_schedule
              WHERE departure_time = :time AND direction = :direction`,
-            { time, direction }
+            { time, direction } // Passing both as strings
         );
 
         if (scheduleResult.rows.length === 0) {
@@ -30,8 +34,8 @@ async function createBooking(userId, time, direction) {
         return { success: true, message: 'Booking created successfully.' };
 
     } catch (error) {
-        console.error('Database error:', error);
-        return { success: false, message: 'Database error.' };
+        console.error('Database error:', error); // Log full error for debugging
+        return { success: false, message: `Database error: ${error.message}` }; // Return specific error message
     } finally {
         if (connection) {
             await connection.close();

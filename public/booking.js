@@ -1,5 +1,8 @@
 async function bookRide(button, id, time, direction) {
+
+    
     try {
+    
       // Disable button and show loading text
       button.disabled = true;
       const originalText = button.textContent;
@@ -18,6 +21,17 @@ async function bookRide(button, id, time, direction) {
       
       if (response.ok) {
         alert(data.message || 'Booking successful!');
+
+        generateTicket({
+          bookingId: Math.floor(Math.random() * 100000), // Example, ideally from backend
+          time: time,
+          direction: direction,
+          username: document.querySelector('.username').textContent,
+          email: document.querySelector('.email').textContent
+      });
+
+
+
       } else {
         alert(data.message || 'Booking failed.');
       }
@@ -31,3 +45,24 @@ async function bookRide(button, id, time, direction) {
     }
   }
   
+
+
+
+  function generateTicket(bookingData) {
+    document.getElementById('ticketId').textContent = bookingData.bookingId;
+    document.getElementById('ticketTime').textContent = bookingData.time;
+    document.getElementById('ticketDirection').textContent = bookingData.direction;
+    document.getElementById('ticketUser').textContent = bookingData.username;
+    document.getElementById('ticketEmail').textContent = bookingData.email;
+
+    // Show the ticket after filling it
+    document.getElementById('ticket').style.display = 'block';
+}
+
+function printTicket() {
+    const ticketContent = document.getElementById('ticket').outerHTML;
+    const newWindow = window.open('', '', 'width=600,height=600');
+    newWindow.document.write(ticketContent);
+    newWindow.document.close();
+    newWindow.print();
+}
