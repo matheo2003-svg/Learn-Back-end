@@ -1,3 +1,372 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlideConnex</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#4F46E5',secondary:'#10B981'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f9fafb;
+}
+.booking-card {
+transition: transform 0.2s ease-in-out;
+}
+.booking-card:active {
+transform: scale(0.98);
+}
+.tab-active {
+color: #4F46E5;
+border-bottom: 2px solid #4F46E5;
+}
+.status-badge {
+display: inline-flex;
+align-items: center;
+padding: 2px 8px;
+border-radius: 12px;
+font-size: 0.75rem;
+font-weight: 500;
+}
+.status-confirmed {
+background-color: rgba(16, 185, 129, 0.1);
+color: #10B981;
+}
+.status-completed {
+background-color: rgba(107, 114, 128, 0.1);
+color: #6B7280;
+}
+.status-cancelled {
+background-color: rgba(239, 68, 68, 0.1);
+color: #EF4444;
+}
+</style>
+</head>
+<body class="bg-gray-50">
+<main class="min-h-screen flex flex-col">
+<!-- Hero Section -->
+<section class="relative h-[420px] bg-primary overflow-hidden">
+<div class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=modern%2520city%2520bus%2520transportation%2520hub%2C%2520clean%2520modern%2520architectural%2520style%2C%2520minimalist%2520design%2C%2520soft%2520lighting%2C%2520muted%2520colors%2C%2520professional%2520photography&width=800&height=600&seq=1&orientation=landscape')] bg-cover bg-center opacity-20"></div>
+<div class="relative px-6 pt-16 pb-12 flex flex-col h-full">
+<div class="flex justify-between items-center mb-auto">
+<span class="text-2xl font-['Pacifico'] text-white">GlideConnex</span>
+<button id="menu-btn" class="w-10 h-10 flex items-center justify-center rounded-full bg-white bg-opacity-20">
+<i class="ri-menu-line text-white"></i>
+</button>
+</div>
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-white mb-3">Campus Transport</h1>
+<p class="text-white text-opacity-90">Your reliable campus transportation solution. Book rides, and manage your journeys with ease.</p>
+</div>
+<div class="flex space-x-3">
+<button id="sign-in-btn" class="flex-1 py-3 bg-white text-primary font-medium rounded-button" >Sign In</button>
+<button id="sign-up-btn" class="flex-1 py-3 bg-white bg-opacity-20 text-white font-medium rounded-button">Sign Up</button>
+</div>
+</div>
+</section>
+
+<!-- Features Section -->
+<section class="px-6 py-12 bg-white">
+<h2 class="text-xl font-semibold text-gray-800 mb-8">Why Choose Us</h2>
+<div class="grid grid-cols-2 gap-6">
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-3">
+<i class="ri-time-line text-primary"></i>
+</div>
+<h3 class="text-sm font-medium text-gray-800 mb-1">Real-time Tracking</h3>
+<p class="text-xs text-gray-600">Track your bus location in real-time</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-3">
+<i class="ri-calendar-check-line text-primary"></i>
+</div>
+<h3 class="text-sm font-medium text-gray-800 mb-1">Easy Booking</h3>
+<p class="text-xs text-gray-600">Book your rides in advance</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-3">
+<i class="ri-notification-4-line text-primary"></i>
+</div>
+<h3 class="text-sm font-medium text-gray-800 mb-1">Smart Notifications</h3>
+<p class="text-xs text-gray-600">Get timely alerts and updates</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-3">
+<i class="ri-route-line text-primary"></i>
+</div>
+<h3 class="text-sm font-medium text-gray-800 mb-1">Multiple Routes</h3>
+<p class="text-xs text-gray-600">Choose from various routes</p>
+</div>
+</div>
+</section>
+
+<!-- Sign In Modal -->
+<div id="sign-in-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-end z-50 hidden">
+<div class="bg-white rounded-t-2xl w-full p-6 transform transition-transform duration-300 translate-y-full">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-semibold">Sign In</h3>
+<button class="close-modal w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+<i class="ri-close-line text-gray-500"></i>
+</button>
+</div>
+
+
+
+<form class="space-y-4" action="/login" method="POST">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="loginEmail">Email</label>
+<input type="email" id="loginEmail" name="email" class="w-full px-4 py-3 rounded-lg bg-gray-100 border-none" placeholder="Enter your email" required>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="loginPassword">Password</label>
+<input type="password" id="loginPassword" name="password" class="w-full px-4 py-3 rounded-lg bg-gray-100 border-none" placeholder="Enter your password" required>
+</div>
+<button type="submit" class="w-full py-3 bg-primary text-white font-medium rounded-button">Log in</button>
+</form>
+<p class="text-center text-sm text-gray-600 mt-4">Don't have an account? <button class="text-primary font-medium" id="switch-to-signup">Sign Up</button></p>
+</div>
+</div>
+<!-- Sign Up Modal -->
+<div id="sign-up-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-end z-50 hidden">
+<div class="bg-white rounded-t-2xl w-full p-6 transform transition-transform duration-300 translate-y-full">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-semibold">Sign Up</h3>
+<button class="close-modal w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+<i class="ri-close-line text-gray-500"></i>
+</button>
+</div>
+<form class="space-y-4" action="/submit" method="POST">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="username">Full Name</label>
+<input type="text" id="username" name="username" class="w-full px-4 py-3 rounded-lg bg-gray-100 border-none" placeholder="Enter your full name" required>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email</label>
+<input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg bg-gray-100 border-none" placeholder="Enter your email" required>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="password">Password</label>
+<input type="password" id="password" name="password" class="w-full px-4 py-3 rounded-lg bg-gray-100 border-none" placeholder="Create a password" required>
+</div>
+
+<button type="submit" class="w-full py-3 bg-primary text-white font-medium rounded-button" id="sign-ip-btn" >Create Account</button>
+</form>
+<p class="text-center text-sm text-gray-600 mt-4">Already have an account? <button class="text-primary font-medium" id="switch-to-signin">Sign In</button></p>
+</div>
+</div>
+<!--
+const signInBtn = document.getElementById('sign-in-btn');
+    const signUpBtn = document.getElementById('sign-up-btn');
+-->
+
+<!-- Menu Modal -->
+<div id="menu-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+<div class="bg-white w-3/4 h-full p-6">
+<div class="flex justify-between items-center mb-8">
+<span class="text-xl font-['Pacifico'] text-primary">GlideConnex</span>
+<button id="close-menu" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+<i class="ri-close-line text-gray-500"></i>
+</button>
+</div>
+<nav class="space-y-4">
+<a href="#" class="block py-2 text-gray-700">About Us</a>
+<a href="#" class="block py-2 text-gray-700">Contact</a>
+<a href="#" class="block py-2 text-gray-700">Terms of Service</a>
+<a href="#" class="block py-2 text-gray-700">Privacy Policy</a>
+</nav>
+</div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const signInBtn = document.getElementById('sign-in-btn');
+    const signUpBtn = document.getElementById('sign-up-btn');
+    const signInModal = document.getElementById('sign-in-modal');
+    const signUpModal = document.getElementById('sign-up-modal');
+    const menuBtn = document.getElementById('menu-btn');
+    const menuModal = document.getElementById('menu-modal');
+    const closeButtons = document.querySelectorAll('.close-modal');
+    const switchToSignup = document.getElementById('switch-to-signup');
+    const switchToSignin = document.getElementById('switch-to-signin');
+    const closeMenu = document.getElementById('close-menu');
+    
+    function showModal(modal) {
+    modal.classList.remove('hidden');
+    modal.querySelector('.bg-white').classList.remove('translate-y-full');
+    }
+    
+    function hideModal(modal) {
+    modal.querySelector('.bg-white').classList.add('translate-y-full');
+    setTimeout(() => {
+    modal.classList.add('hidden');
+    }, 300);
+    }
+    
+    function hideAllModals() {
+    [signInModal, signUpModal, menuModal].forEach(modal => {
+    if (!modal.classList.contains('hidden')) {
+    hideModal(modal);
+    }
+    });
+    }
+    
+    signInBtn.addEventListener('click', () => showModal(signInModal));
+    signUpBtn.addEventListener('click', () => showModal(signUpModal));
+    menuBtn.addEventListener('click', () => menuModal.classList.remove('hidden'));
+    closeMenu.addEventListener('click', () => menuModal.classList.add('hidden'));
+    
+    closeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+    hideModal(button.closest('.fixed'));
+    });
+    });
+    
+    switchToSignup.addEventListener('click', () => {
+    hideModal(signInModal);
+    setTimeout(() => showModal(signUpModal), 300);
+    });
+    
+    switchToSignin.addEventListener('click', () => {
+    hideModal(signUpModal);
+    setTimeout(() => showModal(signInModal), 300);
+    });
+    
+    document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('fixed')) {
+    hideAllModals();
+    }
+    });
+    
+
+    const activeBtn = document.getElementById('active-btn');
+    const pastBtn = document.getElementById('past-btn');
+    const activeBookings = document.getElementById('active-bookings');
+    const pastBookings = document.getElementById('past-bookings');
+    const emptyState = document.getElementById('empty-state');
+    activeBtn.addEventListener('click', function() {
+    activeBtn.classList.add('tab-active');
+    activeBtn.classList.remove('text-gray-500');
+    pastBtn.classList.remove('tab-active');
+    pastBtn.classList.add('text-gray-500');
+    activeBookings.classList.remove('hidden');
+    pastBookings.classList.add('hidden');
+    emptyState.classList.add('hidden');
+    });
+    pastBtn.addEventListener('click', function() {
+    pastBtn.classList.add('tab-active');
+    pastBtn.classList.remove('text-gray-500');
+    activeBtn.classList.remove('tab-active');
+    activeBtn.classList.add('text-gray-500');
+    pastBookings.classList.remove('hidden');
+    activeBookings.classList.add('hidden');
+    emptyState.classList.add('hidden');
+    });
+    // Filter modal functionality
+    const filterBtn = document.getElementById('filter-btn');
+    const filterModal = document.getElementById('filter-modal');
+    const closeFilterModalBtn = document.getElementById('close-filter-modal');
+    const resetFilterBtn = document.getElementById('reset-filter');
+    const applyFilterBtn = document.getElementById('apply-filter');
+    filterBtn.addEventListener('click', function() {
+    filterModal.classList.remove('hidden');
+    });
+    closeFilterModalBtn.addEventListener('click', function() {
+    filterModal.classList.add('hidden');
+    });
+    resetFilterBtn.addEventListener('click', function() {
+    const radioButtons = document.querySelectorAll('input[name="sort"]');
+    radioButtons[0].checked = true;
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+    checkbox.checked = true;
+    });
+    });
+    applyFilterBtn.addEventListener('click', function() {
+    filterModal.classList.add('hidden');
+    // Here you would implement the actual filtering logic
+    });
+    // Cancel booking functionality
+    const cancelBtns = document.querySelectorAll('.cancel-btn');
+    const cancelModal = document.getElementById('cancel-modal');
+    const closeCancelModalBtn = document.getElementById('close-cancel-modal');
+    const backCancelBtn = document.getElementById('back-cancel');
+    const confirmCancelBtn = document.getElementById('confirm-cancel');
+    const cancelSuccessModal = document.getElementById('cancel-success-modal');
+    const closeCancelSuccessBtn = document.getElementById('close-cancel-success');
+    cancelBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const card = this.closest('.booking-card');
+    const dateTime = card.querySelector('.text-xl').textContent + ', ' + card.querySelector('.text-sm').textContent;
+    const route = card.querySelector('.text-gray-700').textContent;
+    const ref = card.querySelector('.text-xs.text-gray-500').textContent.replace('Booking Ref: ', '');
+    document.getElementById('cancel-date-time').textContent = dateTime;
+    document.getElementById('cancel-route').textContent = route;
+    document.getElementById('cancel-ref').textContent = ref;
+    cancelModal.classList.remove('hidden');
+    });
+    });
+    closeCancelModalBtn.addEventListener('click', function() {
+    cancelModal.classList.add('hidden');
+    });
+    backCancelBtn.addEventListener('click', function() {
+    cancelModal.classList.add('hidden');
+    });
+    confirmCancelBtn.addEventListener('click', function() {
+    cancelModal.classList.add('hidden');
+    cancelSuccessModal.classList.remove('hidden');
+    });
+    closeCancelSuccessBtn.addEventListener('click', function() {
+    cancelSuccessModal.classList.add('hidden');
+    // Here you would implement the actual cancellation logic
+    // For demo purposes, let's just refresh the page
+    // In a real app, you would update the UI to reflect the cancellation
+    });
+    // Show empty state functionality (for demo purposes)
+    // Uncomment the below lines to show the empty state
+    /*
+    document.getElementById('show-empty').addEventListener('click', function() {
+    activeBookings.classList.add('hidden');
+    pastBookings.classList.add('hidden');
+    emptyState.classList.remove('hidden');
+    });
+    */
+    });
+    </script>
+    </body>
+    </html>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,3 +406,4 @@
     </form>
 </body>
 </html>
+-->

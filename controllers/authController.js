@@ -22,9 +22,9 @@ exports.registerUser = async (req, res) => {
             [username, email, hashedPassword],
             { autoCommit: true }
         );
-
-        res.send(`<h1>Thank you, ${username}!</h1><p>We received your registration EMAIL: ${email}</p>`);
-
+         // on this section write code for what you want to happen in successful registration
+        //res.send(`<h1>Thank you, ${username}!</h1><p>We received your registration EMAIL: ${email}</p>`);
+        
         try {
             await sendWelcomeEmail(email, username);
             console.log("Welcome email sent successfully.");
