@@ -1,5 +1,5 @@
 // Simulated booking data you would actually fetch from your database or JWT
-const bookings = [
+/*const bookings = [
     {
       ticketId: 'G12345',
       time: '06:00',
@@ -14,7 +14,58 @@ const bookings = [
       username: 'Matheo',
       email: 'matheo@example.com'
     }
-  ];
+  ];*/
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const storedBookings = localStorage.getItem('userBookings');
+  
+    if (storedBookings) {
+      const bookings = JSON.parse(storedBookings);
+  
+      // Assuming 2 bookings: [going, return]
+      if (bookings[0]) renderTicket('ticketGoing', bookings[0], 'blue');
+      if (bookings[1]) renderTicket('ticketReturn', bookings[1], 'green');
+  
+      // Optional: clear storage after rendering
+      localStorage.removeItem('userBookings');
+    } else {
+      console.warn("No booking data found.");
+    }
+  });
+  
+
+
+  function downloadTicket() {
+    const ticketGoing = document.getElementById('ticketGoing');
+    const ticketReturn = document.getElementById('ticketReturn');
+  
+    const wrapper = document.createElement('div');
+    wrapper.appendChild(ticketGoing.cloneNode(true));
+    wrapper.appendChild(document.createElement('br'));
+    wrapper.appendChild(ticketReturn.cloneNode(true));
+  
+    const opt = {
+      margin:       0.5,
+      filename:     'My_Tickets.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+  
+    html2pdf().set(opt).from(wrapper).save();
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
   
   // Function to render a ticket
   function renderTicket(containerId, ticketData, color) {
@@ -56,4 +107,5 @@ const bookings = [
   // Render the two tickets
   renderTicket('ticketGoing', bookings[0], 'blue');
   renderTicket('ticketReturn', bookings[1], 'green');
+  
   

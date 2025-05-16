@@ -23,15 +23,26 @@ exports.registerUser = async (req, res) => {
             { autoCommit: true }
         );
          // on this section write code for what you want to happen in successful registration
-        //res.send(`<h1>Thank you, ${username}!</h1><p>We received your registration EMAIL: ${email}</p>`);
+         // res.send(`<h1>Thank you, ${username}!</h1><p>We received your registration EMAIL: ${email}</p>`);
         
         try {
             await sendWelcomeEmail(email, username);
-            console.log("Welcome email sent successfully.");
+            console.log("Welcome email sent successfully."); 
+            
         } catch (emailError) {
             console.error("Error sending welcome email:", emailError);
         }
 
+        
+        res.send(`     
+            <script>
+              alert('Registration successful! Please sign in.');
+              window.location.href = '/front-end.html';
+            </script>
+          `); //Displays the popup message in a successfull registration and redirects to the mainpage
+          
+
+        
     } catch (error) {
         console.error("Error inserting data:", error);
         res.status(500).send("Error saving data");
@@ -92,30 +103,3 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-// Dashboard
-/*exports.dashboard = (req, res) => {
-    const token = req.query.token;
-
-    if (!token) {
-        return res.status(401).send("Unauthorized: No token provided");
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        res.send(`
-            <h1>Welcome, <span id="username">${decoded.username}</span>!</h1>
-            <p>Email: <span id="email">${decoded.email}</span></p>
-            <button onclick="logout()">Logout</button>
-
-            <script>
-                function logout() {
-                    localStorage.removeItem('token');
-                    window.location.href = '/front-end.html';
-                }
-            </script>
-        `);
-    } catch (error) {
-        res.status(401).send("Unauthorized: Invalid token");
-    }
-};*/

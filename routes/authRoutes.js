@@ -11,6 +11,7 @@ router.get("/", (req, res) => {
 // Register
 router.post("/submit", registerUser);
 
+
 // Login
 router.post("/login", loginUser);
 
